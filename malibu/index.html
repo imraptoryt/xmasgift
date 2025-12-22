@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎄 Świąteczny Prezent</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #1b5e47, #0b3d2e);
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+/* MAIN CARD */
+.card {
+    width: 90%;
+    max-width: 420px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 26px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+    z-index: 1;
+}
+
+button {
+    margin-top: 20px;
+    padding: 14px 20px;
+    border-radius: 22px;
+    border: none;
+    font-size: 1.1em;
+    background: linear-gradient(135deg, #e63946, #ff6b6b);
+    color: white;
+    cursor: pointer;
+}
+
+/* FULLSCREEN LOADER */
+.loader-screen {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top, #1b5e47, #0b3d2e);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    flex-direction: column;
+}
+
+.loader-text {
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+/* SVG GIFT */
+svg {
+    width: 220px;
+}
+
+.lid {
+    transform-origin: center bottom;
+    transition: transform 1s ease;
+}
+
+.open .lid {
+    transform: rotate(-120deg);
+}
+
+/* MODAL */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.modal-content {
+    background: white;
+    color: #333;
+    border-radius: 24px;
+    padding: 30px;
+    max-width: 320px;
+    text-align: center;
+    animation: pop 0.4s ease;
+}
+
+.modal img {
+    max-width: 100%;
+    border-radius: 16px;
+    margin: 15px 0;
+}
+
+.close {
+    background: #e63946;
+    margin-top: 15px;
+}
+
+/* ANIMATIONS */
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* SPARKLES */
+.sparkle {
+    position: fixed;
+    pointer-events: none;
+    animation: sparkle 1s forwards;
+}
+
+@keyframes sparkle {
+    from { opacity: 1; transform: scale(0.5) translateY(0); }
+    to { opacity: 0; transform: scale(1.2) translateY(-60px); }
+}
+
+/* SNOW */
+.snow {
+    position: fixed;
+    top: -10px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to { transform: translateY(110vh); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>🎄 Świąteczny Prezent 🎁</h1>
+    <p>Kliknij, aby zobaczyć, do kogo jest ten prezent</p>
+    <button onclick="start()">🎁 Zobacz prezent</button>
+</div>
+
+<!-- FULLSCREEN LOADER -->
+<div class="loader-screen" id="loader">
+    <svg id="giftSvg" viewBox="0 0 200 200">
+        <rect x="30" y="90" width="140" height="80" rx="10" fill="#e63946"/>
+        <rect x="95" y="90" width="10" height="80" fill="#fff"/>
+        <rect x="30" y="120" width="140" height="10" fill="#fff"/>
+        <rect class="lid" x="25" y="60" width="150" height="40" rx="10" fill="#ff6b6b"/>
+    </svg>
+    <div class="loader-text">Otwieranie prezentu… 🎄</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h2 id="name"></h2>
+        <img id="gif">
+        <p id="message"></p>
+        <button class="close" onclick="closeModal()">Zamknij</button>
+    </div>
+</div>
+
+<script>
+/* 🎁 ONE GIFT DATA */
+const gift = {
+    name: "Maciek 🎄",
+    message: "Wesołych Świąt! 🎄 Ten prezent jest specjalnie dla Ciebie. Dziękuję, że jesteś ✨🎁",
+    gif: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXVoaWQ1djF6YnZ1MmkzeW1hZ2IxZjhlaGJiaHZ6d2djemxpMnd3OSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/9w475hDWEPVlu/giphy.gif"
+};
+
+function start() {
+    const loader = document.getElementById("loader");
+    const giftSvg = document.getElementById("giftSvg");
+
+    loader.style.display = "flex";
+
+    setTimeout(() => {
+        giftSvg.classList.add("open");
+        sparkles();
+    }, 600);
+
+    setTimeout(showGift, 1800);
+}
+
+function showGift() {
+    document.getElementById("name").textContent =
+        "🎁 Prezent dla: " + gift.name;
+
+    document.getElementById("message").textContent = gift.message;
+    document.getElementById("gif").src = gift.gif;
+
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+/* SPARKLES */
+function sparkles() {
+    for (let i = 0; i < 20; i++) {
+        const s = document.createElement("div");
+        s.className = "sparkle";
+        s.textContent = "✨";
+        s.style.left = Math.random() * 100 + "vw";
+        s.style.top = Math.random() * 100 + "vh";
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 1000);
+    }
+}
+
+/* SNOW */
+function snow() {
+    const s = document.createElement("div");
+    s.className = "snow";
+    s.textContent = "❄";
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.fontSize = Math.random() * 10 + 10 + "px";
+    s.style.opacity = Math.random();
+    s.style.animationDuration = Math.random() * 4 + 4 + "s";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 8000);
+}
+setInterval(snow, 300);
+</script>
+
+</body>
+</html>
