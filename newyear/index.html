@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>💖</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+        background: linear-gradient(135deg, #ffd6e8, #fff1f7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .card {
+        background: white;
+        padding: 40px;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        animation: pop 0.6s ease;
+    }
+
+    h1 {
+        color: #ff4d88;
+        margin-bottom: 25px;
+    }
+
+    button {
+        padding: 15px 30px;
+        margin: 10px;
+        border: none;
+        border-radius: 30px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: transform 0.2s, background 0.3s;
+    }
+
+    .yes {
+        background: #ff4d88;
+        color: white;
+    }
+
+    .yes:hover {
+        background: #ff1f6a;
+        transform: scale(1.1);
+    }
+
+    .no {
+        background: #ddd;
+        color: #444;
+    }
+
+    .no:hover {
+        transform: scale(1.05);
+    }
+
+    @keyframes pop {
+        from { transform: scale(0.7); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Loading screen */
+    .loading {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .heart {
+        width: 40px;
+        height: 40px;
+        background: #ff4d88;
+        transform: rotate(45deg);
+        animation: pulse 1s infinite;
+        position: relative;
+    }
+
+    .heart::before,
+    .heart::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+        background: #ff4d88;
+        border-radius: 50%;
+        position: absolute;
+    }
+
+    .heart::before {
+        top: -20px;
+        left: 0;
+    }
+
+    .heart::after {
+        left: -20px;
+        top: 0;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1) rotate(45deg); }
+        50% { transform: scale(1.3) rotate(45deg); }
+        100% { transform: scale(1) rotate(45deg); }
+    }
+
+    /* Final screen */
+    .final {
+        display: none;
+        animation: pop 0.8s ease;
+    }
+
+    .final h2 {
+        color: #ff4d88;
+        font-size: 28px;
+    }
+
+    .final h1 {
+        font-size: 48px;
+        color: #ff1f6a;
+    }
+</style>
+</head>
+<body>
+
+<div class="card" id="question">
+    <h1>Do you love me? 💕</h1>
+    <button class="yes" onclick="yesClicked()">Yes 💖</button>
+    <button class="no" onclick="noClicked(this)">No 🙈</button>
+</div>
+
+<div class="card loading" id="loading">
+    <div class="heart"></div>
+    <p>Loading love...</p>
+</div>
+
+<div class="card final" id="final">
+    <h2>Mon cœur est à toi 💘</h2>
+    <h1>I LOVE YOU</h1>
+    <p>Pour toujours 💕</p>
+</div>
+
+<script>
+    function noClicked(btn) {
+        btn.className = 'yes';
+        btn.innerHTML = 'Yes 💖';
+        btn.onclick = yesClicked;
+    }
+
+    function yesClicked() {
+        document.getElementById('question').style.display = 'none';
+        document.getElementById('loading').style.display = 'flex';
+
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('final').style.display = 'block';
+        }, 2500);
+    }
+</script>
+
+</body>
+</html>
